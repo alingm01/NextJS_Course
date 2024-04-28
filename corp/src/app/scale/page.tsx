@@ -1,7 +1,11 @@
-const ScalePage = () => {
-  return (
-    <div>Scale Page!</div>
-  )
-}
+import scaleImg from '/public/scale.jpg';
+import Hero from "@/components/Hero";
 
-export default ScalePage
+export default function ScalePage() {
+  return (
+      <Hero 
+        imgSrc={scaleImg} 
+        imgAlt="steel factory" 
+        title="Super high reliability hosting"/>
+  );
+}
