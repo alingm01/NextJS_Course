@@ -1,17 +1,56 @@
-
+import { db } from '@/db'
+import { redirect } from 'next/navigation'
 
 export default function SnippetsCreatePage() {
+  async function createSnippet(form: FormData) {
+
+    "use server"
+
+    const title = form.get('title') as String;
+    const code = form.get('code') as String;
+
+    const snippet = await db.snippet.create({
+      data: {
+        title,
+        code,
+      }
+    })
+
+    console.log(snippet)
+    redirect('/');
+  }
+
 
   return(
-    <div>
-      <div>
-        <form >
-          <label htmlFor="title">Title</label>
-          <input type="text" name="title" id="title" className="w-full p-2 border-2" />
-          <label htmlFor="code">Title</label>
-          <textarea name="code" id="code" className="w-full p-2 border-2" />
-        </form >
+    <form action={createSnippet}>
+      <h3 className="font-bold m-3">Create a Snippet</h3>
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4">
+          <label htmlFor="title" className="w-12">
+            Title
+          </label>
+          <input
+            name="title"
+            className="border rounded p-2 w-full"
+            id="title"
+          />
+        </div>
+
+        <div className="flex gap-4">
+          <label htmlFor="code" className="w-12">
+            Code
+          </label>
+          <textarea
+            name="code"
+            className="border rounded p-2 w-full"
+            id="code"
+          />
+        </div>
+
+        <button type="submit" className="rounded p-2 bg-blue-200">
+          Create
+        </button>
       </div>
-    </div>
+    </form>
   )
 }
