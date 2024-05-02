@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 
 import { Snippet } from "@prisma/client";
 import { Editor } from "@monaco-editor/react";
