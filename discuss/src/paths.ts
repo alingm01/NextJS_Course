@@ -12,7 +12,7 @@ const paths = {
   },
 
   postShow: (topicSlug: string, postID: number) => {
-    return `/${topicSlug}/post/${postID}`
+    return `/${topicSlug}/posts/${postID}`
   }
 }
 
