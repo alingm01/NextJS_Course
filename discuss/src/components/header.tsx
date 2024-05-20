@@ -1,4 +1,5 @@
 import Link from "next/link";
+import * as actions from '@/actions';
 import {
   Navbar,
   NavbarBrand,
@@ -6,7 +7,10 @@ import {
   NavbarItem,
   Input,
   Button,
-  Avatar
+  Avatar,
+  Popover,
+  PopoverTrigger,
+  PopoverContent
 } from '@nextui-org/react';
 import { auth } from '@/auth';
 
@@ -16,7 +20,20 @@ export default async function Header() {
 
   let authContent: React.ReactNode;
   if(session?.user) {
-    authContent = <Avatar src={session.user.image || ''} />;
+    authContent = (
+      <Popover placement="left">
+        <PopoverTrigger>
+          <Avatar src={session.user.image || ''} />
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className="p-4">
+            <form action={actions.signOut}>
+              <Button type="submit">Sign Out</Button>
+            </form>
+          </div>
+        </PopoverContent>
+      </Popover>
+    )
   } else {
     authContent = <>
       <NavbarItem>
