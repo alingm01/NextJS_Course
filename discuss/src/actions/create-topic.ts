@@ -1,7 +1,6 @@
 'use server';
 
-import { divider } from '@nextui-org/react';
-import { error } from 'console';
+import { auth } from '@/auth';
 import { z } from 'zod';
 
 const createTopicSchema = z.object({
@@ -13,6 +12,7 @@ interface createTopicFormState {
   errors: {
     name?: string[],
     description?: string[],
+    _form?: string[],
   }
 }
 
@@ -24,8 +24,18 @@ export async function createTopic(formState: createTopicFormState, formData: For
     description: formData.get('description')
   })
 
+  const session = auth();
+
   if(!result.success) {
     return {errors: result.error.flatten().fieldErrors}
+  }
+
+  if(!session || !session.user) {
+    return {
+      errors: {
+        _form: ['You need to be signed in to do this.']
+      }
+    }
   }
 
   return {errors: {}}
