@@ -7,6 +7,7 @@ import { db } from '@/db';
 import paths from '@/paths';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { resolve } from 'path';
 
 
 const createTopicSchema = z.object({
@@ -47,7 +48,6 @@ export async function createTopic(formState: createTopicFormState, formData: For
   let topic: Topic;
  
   try {
-    console.log(session)
     topic = await db.topic.create({
       data: {
         slug: result.data.name,
