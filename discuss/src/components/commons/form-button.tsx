@@ -8,7 +8,7 @@ interface formStatusChildren {
   children: React.ReactNode
 }
 
-export default function LoaderButton({children}: formStatusChildren) {
+export default function FormButton({children}: formStatusChildren) {
 
   const { pending } = useFormStatus();
 

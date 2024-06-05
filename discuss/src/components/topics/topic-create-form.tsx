@@ -11,7 +11,7 @@ import {
 
 import * as actions from '@/actions';
 import { useFormState } from 'react-dom';
-import LoaderButton from '@/components/commons/loader';
+import FormButton from '../commons/form-button';
 
 export default function TopicCreateForm() {
 
@@ -46,7 +46,7 @@ export default function TopicCreateForm() {
                 formState.errors._form ? <div className='rounded-lg p-2 bg-red-400 border border-red-400'>{formState.errors._form?.join(', ')}</div> : null
               }
             
-             {<LoaderButton>Save</LoaderButton>}
+             {<FormButton>Save</FormButton>}
           </div>
         </form>
       </PopoverContent>
