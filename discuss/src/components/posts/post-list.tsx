@@ -1,13 +1,12 @@
+import type { PostWithData } from '@/db/queries/posts';
 import Link from 'next/link';
 import paths from '@/paths';
-import { PostWithData } from '@/db/queries/posts';
 
 interface PostListProps {
-  fetchData: () => Promise<PostWithData[]>
+  fetchData: () => Promise<PostWithData[]>;
 }
 
-// TODO: Get list of posts into this component somehow
-export default async function PostList( {fetchData}: PostListProps) {
+export default async function PostList({ fetchData }: PostListProps) {
   const posts = await fetchData();
 
   const renderedPosts = posts.map((post) => {

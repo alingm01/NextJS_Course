@@ -1,76 +1,79 @@
 'use server';
 
-import { auth } from '@/auth';
-import { z } from 'zod';
 import type { Topic } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
+import { auth } from '@/auth';
 import { db } from '@/db';
 import paths from '@/paths';
-import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
-import { resolve } from 'path';
-
 
 const createTopicSchema = z.object({
-  name: z.string().min(3).regex(/^[a-z-]+$/, {message: 'must be lowercase letters or dashes or spaces'}),
-  description: z.string().min(10)
-})
+  name: z
+    .string()
+    .min(3)
+    .regex(/[a-z-]/, {
+      message: 'Must be lowercase letters or dashes without spaces',
+    }),
+  description: z.string().min(10),
+});
 
-interface createTopicFormState {
+interface CreateTopicFormState {
   errors: {
-    name?: string[],
-    description?: string[],
-    _form?: string[],
-  }
+    name?: string[];
+    description?: string[];
+    _form?: string[];
+  };
 }
 
-export async function createTopic(formState: createTopicFormState, formData: FormData): Promise<createTopicFormState> {
-  // TODO: revalidate the homepage
-
- const result = createTopicSchema.safeParse({
+export async function createTopic(
+  formState: CreateTopicFormState,
+  formData: FormData
+): Promise<CreateTopicFormState> {
+  const result = createTopicSchema.safeParse({
     name: formData.get('name'),
-    description: formData.get('description')
-  })
+    description: formData.get('description'),
+  });
 
-  const session = await auth();
-
-  if(!result.success) {
-    return {errors: result.error.flatten().fieldErrors}
+  if (!result.success) {
+    return {
+      errors: result.error.flatten().fieldErrors,
+    };
   }
 
-  if(!session || !session.user) {
+  const session = await auth();
+  if (!session || !session.user) {
     return {
       errors: {
-        _form: ['You need to be signed in to do this.']
-      }
-    }
+        _form: ['You must be signed in to do this.'],
+      },
+    };
   }
 
   let topic: Topic;
- 
   try {
     topic = await db.topic.create({
       data: {
         slug: result.data.name,
         description: result.data.description,
-      }
-    })
-  } catch(error: unknown) {
-
-    if(error instanceof Error) {
+      },
+    });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
       return {
         errors: {
-          _form: [error.message]
-        }
-      }
+          _form: [err.message],
+        },
+      };
     } else {
       return {
         errors: {
-          _form: ["Problem has occured"]
-        }
-      }
+          _form: ['Something went wrong'],
+        },
+      };
     }
   }
 
   revalidatePath('/');
-  redirect(paths.topicShow(topic.slug))
+  redirect(paths.topicShow(topic.slug));
 }
