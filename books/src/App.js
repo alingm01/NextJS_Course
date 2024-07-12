@@ -5,7 +5,12 @@ export default function App() {
   const [books, setBooks] =useState([]);
 
   function createBook(title) {
-   console.log('need to creat book:', title)
+   const updatedBooks = [
+    ...books,
+    { id: 123, title}
+   ];
+
+   setBooks(updatedBooks);
   }
 
   return (
