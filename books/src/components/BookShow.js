@@ -16,7 +16,7 @@ function BookShow({ book, onDelete }) {
   let context = <h3>{book.title}</h3>
 
   if(showEdit) {
-    context = <BookEdit />
+    context = <BookEdit book={book}/>
   }
 
   return (
