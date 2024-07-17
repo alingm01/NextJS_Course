@@ -24,9 +24,24 @@ export default function App() {
    setBooks(updatedBooks);
   }
 
+  function onEdit(bookId, newTitle) {
+    const updatedBooks = books.map((book) => {
+      if(book.id === bookId) {
+        return {
+          ...book,
+          title: newTitle
+        }
+      }
+    
+      return book;
+    })
+
+    setBooks(updatedBooks)
+  }
+
   return (
     <div className="app">
-      <BookList books={books} onDelete={deleteBook}/>
+      <BookList books={books} onDelete={deleteBook} onEdit={onEdit}/>
       <BookCreate onCreate = {createBook} />
     </div>
   )

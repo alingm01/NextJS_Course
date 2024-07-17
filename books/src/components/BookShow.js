@@ -1,7 +1,7 @@
 import { useState } from "react";
 import BookEdit from "./BookEdit";
 
-function BookShow({ book, onDelete }) {
+function BookShow({ book, onDelete, onEdit }) {
 
   const [showEdit, SetShowEdit] = useState(false);
 
@@ -16,7 +16,7 @@ function BookShow({ book, onDelete }) {
   let context = <h3>{book.title}</h3>
 
   if(showEdit) {
-    context = <BookEdit book={book}/>
+    context = <BookEdit book={book} onEdit={onEdit}/>
   }
 
   return (
