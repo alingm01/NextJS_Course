@@ -3,20 +3,25 @@ import BookEdit from "./BookEdit";
 
 function BookShow({ book, onDelete, onEdit }) {
 
-  const [showEdit, SetShowEdit] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   const handleEditClick = () => {
-    SetShowEdit(!showEdit);
+    setShowEdit(!showEdit);
   }
 
   const handleDeleteClick = () => {
     onDelete(book.id)
   }
 
+  const handleSubmit = (id, title) => {
+    setShowEdit(false);
+    onEdit(id, title)
+  }
+
   let context = <h3>{book.title}</h3>
 
   if(showEdit) {
-    context = <BookEdit book={book} onEdit={onEdit}/>
+    context = <BookEdit book={book} onSubmit={handleSubmit}/>
   }
 
   return (
